@@ -4,6 +4,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
+### `npm intall`
+After the dowload of the application you should launch "npm install" command to intall all npm package and dependencies
+
 ### `npm start`
 
 Runs the app in the development mode.<br />

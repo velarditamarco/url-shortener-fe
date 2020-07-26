@@ -19,38 +19,6 @@ export default class UrlShortenerForm extends React.Component{
         }      
     }
 
-    render(){
-        let title = ''
-        let buttonText = ''
-
-        if (this.props.isCreateAction){
-            title = <h3>Create your link here</h3>
-            buttonText = 'create'
-        }
-        else{
-            title = <h3>Edit your link here</h3>
-            buttonText = 'edit'           
-        }
-
-        return (
-            <div>
-                 {title} 
-                 <form onSubmit={this.handleSubmit} ref ={el => {this.myForm = el}}>
-                     <input type="text" placeholder='ShortLink' onChange={this.handleChange} name="shortLink" defaultValue ={this.state.shortLink} required/>
-                     <input type="text" placeholder='URL'  onChange={this.handleChange} name="url" defaultValue={this.state.url} required/>
-
-                     {this.state.errors.shortLink} 
-                     
-                     {this.state.errors.url}
-
-                    <input type="submit" value={buttonText} />
-                </form>      
-
-            {this.state.message}         
-            </div>
-          );
-    }
-
     handleSubmit = (e) => {
         e.preventDefault();
 
@@ -84,7 +52,7 @@ export default class UrlShortenerForm extends React.Component{
         UrlShortenerService.api.create(input)
         .then(res => { 
             this.setState({
-            message : <p style={{color : 'green'}}>{res.data}</p>,
+            message : <p aria-label="message" style={{color : 'green'}}>{res.data}</p>,
             url : '',
             shortLink : ''
             }, () => {
@@ -161,8 +129,12 @@ export default class UrlShortenerForm extends React.Component{
 
       createAndEditErrorHandler(err){
 
-         // my custom server response 
-        if (typeof err.response.data === 'string'){
+        if (!err.response){
+            this.setState({
+                message : <p style = {{color : 'red'}}>Server Error</p>
+            })
+        }// my custom server response 
+        else if (typeof err.response.data === 'string'){
             this.setState({
                 message : <p style = {{color : 'red'}}>{err.response.data}</p>
                 })
@@ -176,9 +148,39 @@ export default class UrlShortenerForm extends React.Component{
             this.setState({
             message : errorFromServer.map((array, i) => <ul key={i}>{array.map((item, i) => <li key={i} style={{color : 'red'}}>{item}</li>)}</ul>)
             })
+        }       
+      }
+
+      render(){
+        let title = ''
+        let buttonText = ''
+
+        if (this.props.isCreateAction){
+            title = <h3>Create your link here</h3>
+            buttonText = 'create'
+        }
+        else{
+            title = <h3>Edit your link here</h3>
+            buttonText = 'edit'           
         }
 
-       
-      }
+        return (
+            <div>
+                 {title} 
+                 <form data-testid="form" onSubmit={this.handleSubmit} ref ={el => {this.myForm = el}}>
+                     <input aria-label="shortLinkInput" type="text" placeholder='ShortLink' onChange={this.handleChange} name="shortLink" defaultValue ={this.state.shortLink} required/>
+                     <input data-testid="urlInput" type="text" placeholder='URL'  onChange={this.handleChange} name="url" defaultValue={this.state.url} required/>
+
+                     {this.state.errors.shortLink} 
+                     
+                     {this.state.errors.url}
+
+                    <input aria-label="button" type="submit" value={buttonText} />
+                </form>      
+
+            {this.state.message}         
+            </div>
+          );
+    }
 
 }
