@@ -55,8 +55,20 @@ class Home extends React.Component{
         return (
             <div >
                 <h1 data-testid="title">Welcome to my Url shortener service</h1>
-                <UrlShortenerForm data-testid="home" ref={this.formToUpdate} UpdateTable={this.getUrls.bind(this)} isCreateAction={this.state.isCreateAction} editItem={this.state.editItem} GoBackToCreate = {this.GoBackToCreate.bind(this)} />                
-                <ShortLinkTable data-testid="form" urls={this.state.urls} UpdateTable={this.getUrls.bind(this)} GoToEdit={this.GoToEdit.bind(this)} />              
+                
+                <UrlShortenerForm 
+                    data-testid="home" 
+                    ref={this.formToUpdate} 
+                    UpdateTable={this.getUrls.bind(this)} 
+                    isCreateAction={this.state.isCreateAction} 
+                    editItem={this.state.editItem} 
+                    GoBackToCreate = {this.GoBackToCreate.bind(this)} />
+
+                <ShortLinkTable 
+                    data-testid="form" 
+                    urls={this.state.urls} 
+                    UpdateTable={this.getUrls.bind(this)} 
+                    GoToEdit={this.GoToEdit.bind(this)} />              
             </div>
           );
     }

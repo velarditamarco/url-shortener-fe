@@ -101,17 +101,25 @@ export default class UrlShortenerForm extends React.Component{
             this.setState({
                 url : this.props.editItem.url,
                 shortLink : this.props.editItem.shortLink,
-                message : ''
+                message : '',
+                errors : {
+                    url : '',
+                    shortLink : ''
+                }
             })
     }
 
     validateForm(targetName, targetValue){
         let errors = this.state.errors;
 
-        if (targetName === 'shortLink')
-            errors.shortLink = (targetValue.length < 3 || targetValue.length > 20) ? <p style={{color : 'red'}}>Short link value should be between 3 and 20 characters</p> : ''
+        if (targetName === 'shortLink'){
+            errors.shortLink = (targetValue.length < 3 || targetValue.length > 20) 
+            ? <p style={{color : 'red'}}>Short link value should be between 3 and 20 characters</p> 
+            : ''
+        }
+            
+        var pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+= &%@! \-/]))?/;    
 
-            var pattern = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+= &%@! \-/]))?/;    
         if (targetName === 'url')
             errors.url = pattern.test(targetValue) ? '' : <p style={{color : 'red'}}>Invalid URL</p>
 
@@ -146,7 +154,11 @@ export default class UrlShortenerForm extends React.Component{
             
             // server returns an array of array(each error per input), so i need to create a double map
             this.setState({
-            message : errorFromServer.map((array, i) => <ul key={i}>{array.map((item, i) => <li key={i} style={{color : 'red'}}>{item}</li>)}</ul>)
+            message : errorFromServer.map((array, i) => 
+                <ul key={i}>{array.map((item, i) => 
+                    <li key={i} style={{color : 'red'}}>
+                        {item}</li>)}
+                </ul>)
             })
         }       
       }
@@ -168,17 +180,37 @@ export default class UrlShortenerForm extends React.Component{
             <div>
                  {title} 
                  <form data-testid="form" onSubmit={this.handleSubmit} ref ={el => {this.myForm = el}}>
-                     <input aria-label="shortLinkInput" type="text" placeholder='ShortLink' onChange={this.handleChange} name="shortLink" defaultValue ={this.state.shortLink} required/>
-                     <input data-testid="urlInput" type="text" placeholder='URL'  onChange={this.handleChange} name="url" defaultValue={this.state.url} required/>
+                     <input 
+                        aria-label="shortLinkInput" 
+                        type="text" 
+                        placeholder='ShortLink' 
+                        onChange={this.handleChange} 
+                        name="shortLink" 
+                        defaultValue ={this.state.shortLink} 
+                        required/>
 
-                     {this.state.errors.shortLink} 
+                     <input 
+                        style={{marginLeft : 5}}
+                        data-testid="urlInput" 
+                        type="text" placeholder='URL'  
+                        onChange={this.handleChange} 
+                        name="url" 
+                        defaultValue={this.state.url} 
+                        required/>
+
+                    <input 
+                        style={{marginLeft : 10}} 
+                        aria-label="button" 
+                        type="submit" 
+                        value={buttonText} />      
                      
-                     {this.state.errors.url}
+                    {this.state.errors.shortLink}
 
-                    <input aria-label="button" type="submit" value={buttonText} />
+                    {this.state.errors.url}
+                     
                 </form>      
 
-            {this.state.message}         
+                {this.state.message} 
             </div>
           );
     }

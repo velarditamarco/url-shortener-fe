@@ -10,11 +10,11 @@ export default class shortLinkTable extends React.Component{
     renderTableElements(){
         if(this.props.urls.length > 0){
             return  this.props.urls.map((item, index) =>
-            <tr key={item.id} data-testid="item">
-                <td>{index +1}</td>
-                <td><a aria-label={"item" + (index+1)} href={item.url} target="_blanck">{item.shortLink}</a></td>
-                <td><button aria-label={"btnDelete" + (index+1)} onClick={() => this.deleteUrl(item.id)}>Delete</button> - <button onClick={() => { this.props.GoToEdit(item)}}>Edit</button></td>
-            </tr>
+                <tr key={item.id} data-testid="item">
+                    <td>{index +1}</td>
+                    <td><a aria-label={"item" + (index+1)} href={item.url} target="_blanck">{item.shortLink}</a></td>
+                    <td><button aria-label={"btnDelete" + (index+1)} onClick={() => this.deleteUrl(item.id)}>Delete</button> - <button onClick={() => { this.props.GoToEdit(item)}}>Edit</button></td>
+                </tr>
             )
         }else{
             return (
@@ -48,7 +48,7 @@ export default class shortLinkTable extends React.Component{
 
     render(){
         return (
-            <div>
+            <div style={{marginTop : 100}}>
             <table id="urlsTable" data-testid="table">
                 <thead>
                     <tr>
@@ -63,7 +63,6 @@ export default class shortLinkTable extends React.Component{
             </table>
 
             {this.state.message}
-
             </div>
         )
     }
